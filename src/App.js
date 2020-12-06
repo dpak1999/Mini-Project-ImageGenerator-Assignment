@@ -6,25 +6,20 @@ import Loader from "./Components/Loader";
 
 const App = () => {
   const [image, setImage] = useState();
-  const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchImage = () => {
     fetch("https://picsum.photos/500").then(
       (result) => {
-        setLoading(true);
+        setLoading(false);
         setImage(result.url);
       },
       (err) => {
-        setLoading(true);
+        setLoading(false);
         setError(err);
       }
     );
-  };
-
-  const getImage = (e) => {
-    e.preventDefault();
-    fetchImage();
   };
 
   useEffect(() => {
@@ -35,13 +30,13 @@ const App = () => {
     <div className="App">
       {error ? (
         <h3>Failed to fetch</h3>
-      ) : !loading ? (
+      ) : loading ? (
         <Loader />
       ) : (
         <ImageDisplay image={image} />
       )}
       <br />
-      <Button variant="outline-primary" className="mt-2" onClick={getImage}>
+      <Button variant="outline-primary" className="mt-2" onClick={fetchImage}>
         Get Image
       </Button>
     </div>
