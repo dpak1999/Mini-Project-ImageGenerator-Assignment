@@ -7,9 +7,11 @@ import Loader from "./Components/Loader";
 const App = () => {
   const [image, setImage] = useState();
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const fetchImage = () => {
+    setLoading(true);
+    setError(null);
     fetch("https://picsum.photos/500").then(
       (result) => {
         setLoading(false);
