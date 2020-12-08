@@ -1,18 +1,48 @@
-import logo from "./logo.svg";
 import "./css/App.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import ImageDisplay from "./Components/ImageDisplay";
+import { Button } from "react-bootstrap";
+import Loader from "./Components/Loader";
 
-function App() {
+const App = () => {
+  const [image, setImage] = useState();
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchImage = () => {
+    setLoading(true);
+    setError(null);
+    fetch("https://picsum.photos/500").then(
+      (result) => {
+        setLoading(false);
+        setImage(result.url);
+      },
+      (err) => {
+        setLoading(false);
+        setError(err);
+      }
+    );
+  };
+
+  useEffect(() => {
+    fetchImage();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-      </header>
+      {error ? (
+        <h3>Failed to fetch</h3>
+      ) : loading ? (
+        <Loader />
+      ) : (
+        <ImageDisplay image={image} />
+      )}
+      <br />
+      <Button variant="outline-primary" className="mt-2" onClick={fetchImage}>
+        Get Image
+      </Button>
     </div>
   );
-}
+};
 
 export default App;
